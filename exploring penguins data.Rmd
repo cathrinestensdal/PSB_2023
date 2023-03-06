@@ -1,0 +1,92 @@
+---
+title: "Exploring the penguins database"
+author: "Cathrine Stensdal"
+date: "2023-03-06"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 2
+    fig_caption: yes
+editor_options:
+  chunck_output_type: console 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+## About the data
+Data were collected and made available by [Dr.
+Kristen Gorman] (https://www.uaf.edu/cfos/people/faculty/detail/kristen-gorman.php) and the [Palmer Station Antarctica
+LTER](https://pallter.marine.rutgers.edu/),a member of the Long Term Ecological Research
+Network.
+The original palmerpenguins data contains
+morphological information on 244 individuals of
+three penguin species (152 individuals of Adelie
+penguins, 68 individuals of Gentoo penguins, and
+124 individuals of Chinstrap penguins).
+```
+
+```{r}
+![Meet the Palmer penguins - "Artwork by @allison_horst"] (lter_penguins.png)
+```
+
+
+```{r}
+#mean, median, max and min values for bill length
+penguins %>% 
+  summarise(mean = mean(bill_length_mm, na.rm=T),
+            median = median(bill_length_mm, na.rm=T),
+            min = min(bill_length_mm, na.rm=T),
+            max = max(bill_length_mm, na.rm=T))
+```
+```{r}
+#mean for all the variables
+penguins %>%
+  summarise_at(vars(bill_length_mm:body_mass_g), mean, na.rm = TRUE)
+```
+```{r}
+#Histogram for all species
+library(tidyr)
+penguins %>%
+  drop_na(bill_depth_mm) %>%
+  ggplot(aes(x=bill_depth_mm))+
+  geom_histogram(color="peachpuff",
+                 fill="peachpuff",
+                 alpha=0.6,
+                 position="identity")
+```
+```{r}
+#Histogram per species x sex
+penguins %>%
+  drop_na(bill_depth_mm) %>%
+    ggplot(aes(x=bill_length_mm,
+               fill=species,
+               na.rm=TRUE))+
+    geom_histogram(color="orange",
+                   alpha=0.6,
+                   bins = 15,
+                   position = "identity")
+```
+
